@@ -40,6 +40,9 @@ public class funktionen {
 
 	public static void send(String nachricht){
 		JOptionPane.showConfirmDialog(null, "\"" + nachricht + "\"   " + "Gesendet!", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+		
+		//Send message with header
+		connection.sendMessage("0x0000"+nachricht);
 	}
 
 	public static void gruppe_aktualisieren(){

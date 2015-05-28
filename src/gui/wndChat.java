@@ -1,6 +1,27 @@
 package gui;
 
+import java.awt.Color;
 import java.awt.EventQueue;
+//import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JList;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.ListSelectionModel;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import func.connection;
+import func.funktionen;
 
 
 public class wndChat {
