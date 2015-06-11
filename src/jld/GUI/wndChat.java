@@ -1,27 +1,13 @@
-package gui;
+package jld.GUI;
 
-import java.awt.Color;
-import java.awt.EventQueue;
-//import javax.swing.DefaultListModel;
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JTextField;
-import javax.swing.JList;
-import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
-import javax.swing.ListSelectionModel;
+import java.awt.*;
+import javax.swing.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import func.connection;
-import func.funktionen;
+import jld.Functions.*;
 
 
 public class wndChat {
@@ -66,7 +52,7 @@ public class wndChat {
 	    //   DefaultListModel listenModell = new DefaultListModel();
 	    //   JList messageList = new JList(listenModell);
 		
-		JList messageList = new JList();
+		JList<String> messageList = new JList<String>();
 		messageList.setEnabled(false);
 		String testNachrichten[] = {"Hallo", "Hallo", "Wie geht es dir?", "Danke, Gut und dir?", "Mir auch,Danke"};
 		messageList.setListData(testNachrichten);
@@ -75,7 +61,7 @@ public class wndChat {
 		
 //List Gruppenliste		
 				
-		JList groupList = new JList();
+		JList<String> groupList = new JList<String>();
 		groupList.setEnabled(false);
 		String testGruppe[] = {"Mueller", "Schmidt", "Schneider", "Fischer", "Weber", "Mayer", "Becker", "Schulz"};
 		groupList.setListData(testGruppe);
@@ -125,7 +111,7 @@ public class wndChat {
 			public void actionPerformed(ActionEvent e) {
 				//Abmelden Klick
 				JOptionPane.showConfirmDialog(null, "Abgemeldet!", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
-				wndLogin.main(null);
+				new wndLogin();
 				frmChat.dispose();
 			}
 		});

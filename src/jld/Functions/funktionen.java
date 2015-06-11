@@ -1,4 +1,4 @@
-package func;
+package jld.Functions;
 
 import javax.swing.JOptionPane;
 

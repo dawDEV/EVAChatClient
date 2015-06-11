@@ -1,4 +1,4 @@
-package gui;
+package jld.GUI;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -10,7 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.EventQueue;
 
-import func.funktionen;
+import jld.Functions.*;
 
 public class wndRegister {
 
@@ -105,7 +105,7 @@ public class wndRegister {
 				if(
 				funktionen.regestrieren(nameField.getText(), MailField.getText(), passwordField.getPassword(), passwordField_W.getPassword())
 				){
-				wndLogin.main(null);
+				new wndLogin();
 				frmRegister.dispose();
 				} else {
 					JOptionPane.showConfirmDialog(null,"Fehler bei der Regestrierung",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
