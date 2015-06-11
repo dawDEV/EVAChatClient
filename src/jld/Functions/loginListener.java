@@ -47,7 +47,14 @@ public class loginListener implements ActionListener {
 				return;
 			}
 			String msg = String.valueOf(buffer);
-			System.out.println(msg);
+			length = 0;
+			while((int)msg.charAt(length) != 0){
+				length++;
+			}
+			msg = msg.substring(0, length);
+			
+			if(msg.equals("0x0000")) System.out.println("Login falsch");
+			else if(msg.equals("0x0001")) System.out.println("Login richtig");
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
 		} catch (IOException e1) {
