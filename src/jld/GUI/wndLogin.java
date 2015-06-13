@@ -60,7 +60,7 @@ public class wndLogin {
 		//Login Button
 		
 		JButton btnLoginButton = new JButton("Login");
-		btnLoginButton.addActionListener(new loginListener(this));
+		btnLoginButton.addActionListener(new CLoginListener(this));
 				
 		btnLoginButton.setBounds(10, 83, 100, 25);
 		frmLogin.getContentPane().add(btnLoginButton);

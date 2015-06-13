@@ -1,7 +1,6 @@
 package jld.GUI;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -109,7 +108,7 @@ public class wndRegister {
 		frmRegister.getContentPane().add(btnExitButton);
 		
 		JButton btnRegisterButton = new JButton("Registrieren");
-		btnRegisterButton.addActionListener(new registerListener(this));
+		btnRegisterButton.addActionListener(new CRegisterListener(this));
 		btnRegisterButton.setBounds(120, 155, 110, 25);
 		frmRegister.getRootPane().setDefaultButton(btnRegisterButton);
 		frmRegister.getContentPane().add(btnRegisterButton);

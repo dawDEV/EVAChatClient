@@ -19,7 +19,7 @@ import jld.Functions.*;
 public class wndChat {
 	private static wndChat mInstance = null;
 	private JFrame frmChat;
-	private JTextField messageField;
+	private JTextField txtMessage;
 	private JMenuBar menuBar;
 	private JMenu mnDatei;
 	private JMenu mnHilfe;
@@ -43,6 +43,9 @@ public class wndChat {
 						mInstance = new wndChat();
 						mInstance.setConnection(connection);
 						mInstance.frmChat.setVisible(true);
+						
+						// Start listening for incoming packets
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -124,22 +127,17 @@ public class wndChat {
 //Button
 		
 		JButton btnSendButton = new JButton("Senden");
-		btnSendButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//Senden Knopf gedrückt
-				funktionen.send(messageField.getText());
-			}
-		});
+		btnSendButton.addActionListener(new CSendMessageListener(this));
 
 //new / set		
 		
 		btnSendButton.setBounds(335, 227, 89, 23);
 		frmChat.getContentPane().add(btnSendButton);
 		frmChat.getRootPane().setDefaultButton(btnSendButton);
-		messageField = new JTextField();
-		messageField.setBounds(10, 228, 315, 23);
-		frmChat.getContentPane().add(messageField);
-		messageField.setColumns(10);
+		txtMessage = new JTextField();
+		txtMessage.setBounds(10, 228, 315, 23);
+		frmChat.getContentPane().add(txtMessage);
+		txtMessage.setColumns(10);
 	
 //meuuBar
 		
@@ -189,12 +187,9 @@ public class wndChat {
 			}
 		});
 		mnHilfe.add(mntmHilfe);
-
-
-
-		
-		
-		
-
+	}
+	
+	public String getMessage(){
+		return txtMessage.getText();
 	}
 }

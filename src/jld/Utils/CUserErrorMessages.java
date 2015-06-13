@@ -2,7 +2,7 @@ package jld.Utils;
 
 import javax.swing.JOptionPane;
 
-public final class UserErrorMessages {
+public final class CUserErrorMessages {
 	public static final void connectionFailed(){
 		JOptionPane.showConfirmDialog(null,"Verbindung zum Server fehlgeschlagen.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
@@ -14,5 +14,9 @@ public final class UserErrorMessages {
 	}
 	public static final void passwordsDoNotMatch(){
 		JOptionPane.showConfirmDialog(null,"Passwoerter stimmen nicht ueberein!",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+	}
+	
+	public static final void sendingMessageFailed(){
+		JOptionPane.showConfirmDialog(null,"Ihre Nachricht konnte nicht gesendet werden.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
 }
