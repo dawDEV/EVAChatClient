@@ -16,4 +16,8 @@ public class CUtils {
 		else returnValue = Integer.toString(length);
 		return returnValue;
 	}
+	
+	public static int parseLength(String length){
+		return Integer.valueOf(length);
+	}
 }

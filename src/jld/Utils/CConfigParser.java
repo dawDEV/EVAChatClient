@@ -1,14 +1,7 @@
 package jld.Utils;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Scanner;
-
-import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
-
-import jld.Exceptions.*;
 
 public class CConfigParser {
 	private File mConfigFile = new File("config.cfg");

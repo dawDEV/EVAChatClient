@@ -19,4 +19,7 @@ public final class CUserErrorMessages {
 	public static final void sendingMessageFailed(){
 		JOptionPane.showConfirmDialog(null,"Ihre Nachricht konnte nicht gesendet werden.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
+	public static final void registerFailed() {
+		JOptionPane.showConfirmDialog(null,"Registration fehlgeschlagen.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+	}
 }

@@ -32,6 +32,7 @@ public class CMain{
 				mConnection = new Socket(mCP.getAddress(), mCP.getPort());
 			} catch (Exception e) {
 				CUserErrorMessages.connectionFailed();
+				System.exit(0);
 			}
 		}
 		return mConnection;

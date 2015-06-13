@@ -1,15 +1,18 @@
 package jld.GUI;
 
-import java.awt.*;
-
 import javax.swing.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.AdjustmentEvent;
+import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
 
@@ -17,47 +20,46 @@ import jld.Functions.*;
 
 
 public class wndChat {
-	private static wndChat mInstance = null;
 	private JFrame frmChat;
 	private JTextField txtMessage;
 	private JMenuBar menuBar;
 	private JMenu mnDatei;
 	private JMenu mnHilfe;
+	private JList<String> listMessage;
+	private JScrollPane listScrollPane;
+	private JList<String> mUserlist;
+	private LinkedList<String> mUsersInChannel = new LinkedList<String>();
+	private LinkedList<String> mChatMessages = new LinkedList<String>();
+	private String mUsername;
 	
 	private Socket mConnection;
+	private BufferedReader mInput;
+	private BufferedWriter mOutput;
 
 	public Socket getConnection() {
 		return mConnection;
 	}
-
-	public void setConnection(Socket mConnection) {
-		this.mConnection = mConnection;
+	public BufferedReader getInput() {
+		return mInput;
 	}
 
-	public static wndChat getInstance(final Socket connection) {
-		
-		if(mInstance == null){
-			EventQueue.invokeLater(new Runnable() {
-				public void run() {
-					try {
-						mInstance = new wndChat();
-						mInstance.setConnection(connection);
-						mInstance.frmChat.setVisible(true);
-						
-						// Start listening for incoming packets
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				}
-			});
-		}
-		return mInstance;
+	public BufferedWriter getOutput() {
+		return mOutput;
+	}
+	
+	public String getUsername(){
+		return mUsername;
 	}
 
 	
-	private wndChat() {
+	public wndChat(Socket connection, BufferedReader in, BufferedWriter out, String username) {
+		mConnection = connection;
+		mInput = in;
+		mOutput = out;
+		mUsername = username;
 		initialize();
+		frmChat.setVisible(true);
+		CPacketListener.getInstance(this);
 	}
 
 	
@@ -69,52 +71,68 @@ public class wndChat {
 		frmChat.setResizable(false);
 		frmChat.getContentPane().setLayout(null);
 		
-		// Setzt die Instanz auf null wenn das Fenster geschlossen wird. "Pseudo Destruktor"
 		frmChat.addWindowListener(new WindowListener() {
+			public void windowOpened(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowIconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeiconified(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowDeactivated(WindowEvent e) {
+			}
+			
+			@Override
+			public void windowClosing(WindowEvent e) {
+			}
+			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				mInstance = null;
+				// Um auch den lesenden PacketListener zu schlieﬂen
+				System.exit(0);
 			}
+			
 			@Override
-			public void windowActivated(WindowEvent e) {}
-
-			@Override
-			public void windowClosing(WindowEvent e) {}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {}
-
-			@Override
-			public void windowIconified(WindowEvent e) {}
-
-			@Override
-			public void windowOpened(WindowEvent e) {}
+			public void windowActivated(WindowEvent e) {
+			}
 		});
-
 		
 //List Nachrichtenliste		
 		
 	    //   DefaultListModel listenModell = new DefaultListModel();
 	    //   JList messageList = new JList(listenModell);
+		listMessage = new JList<String>();
 		
-		JList<String> messageList = new JList<String>();
-		messageList.setEnabled(false);
-		String testNachrichten[] = {"Hallo", "Hallo", "Wie geht es dir?", "Danke, Gut und dir?", "Mir auch,Danke"};
-		messageList.setListData(testNachrichten);
-		messageList.setBounds(10, 36, 315, 181);
-		frmChat.getContentPane().add(messageList);
+		listMessage.setEnabled(false);
+		//String testNachrichten[] = {"Hallo", "Hallo", "Wie geht es dir?", "Danke, Gut und dir?", "Mir auch,Danke"};
+		//listMessage.setListData(testNachrichten);
+		listMessage.setBounds(10, 36, 315, 181);
+		listScrollPane = new JScrollPane(listMessage, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		listScrollPane.setBounds(10, 36, 315, 181);
+		
+		// Autoscroll
+		listScrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
+			@Override
+			public void adjustmentValueChanged(AdjustmentEvent e) {
+				e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+			}
+		});
+		
+		frmChat.getContentPane().add(listScrollPane);
 		
 //List Gruppenliste		
 				
-		JList<String> groupList = new JList<String>();
-		groupList.setEnabled(false);
-		String testGruppe[] = {"Mueller", "Schmidt", "Schneider", "Fischer", "Weber", "Mayer", "Becker", "Schulz"};
-		groupList.setListData(testGruppe);
-		groupList.setBounds(335, 62, 89, 154);
-		frmChat.getContentPane().add(groupList);
+		mUserlist = new JList<String>();
+		mUserlist.setEnabled(false);
+		//String testGruppe[] = {"Mueller", "Schmidt", "Schneider", "Fischer", "Weber", "Mayer", "Becker", "Schulz"};
+		//mUserlist.setListData(testGruppe);
+		mUserlist.setBounds(335, 62, 89, 154);
+		frmChat.getContentPane().add(mUserlist);
 
 //Label Gruppenname					
 				
@@ -191,5 +209,43 @@ public class wndChat {
 	
 	public String getMessage(){
 		return txtMessage.getText();
+	}
+	
+	public void newMessage(String username, String msg){
+		mChatMessages.add(username + ": " + msg);
+		String[] messages = new String[mChatMessages.size()];
+		for(int i = 0; i < messages.length; i++){
+			messages[i] = mChatMessages.get(i);
+		}
+		listMessage.setListData(messages);
+		
+	}
+	
+	public void clearMessagebox(){
+		txtMessage.setText("");
+	}
+	
+	public void addToChannel(String username){
+		mUsersInChannel.add(username);
+		String[] users = new String[mUsersInChannel.size()];
+		for(int i = 0; i < users.length; i++){
+			users[i] = mUsersInChannel.get(i);
+		}
+		mUserlist.setListData(users);
+	}
+	
+	public void removeFromChannel(String username){
+		mUsersInChannel.remove(username);
+		String[] users = new String[mUsersInChannel.size()];
+		for(int i = 0; i < users.length; i++){
+			users[i] = mUsersInChannel.get(i);
+		}
+		mUserlist.setListData(users);
+	}
+	
+	public void clearUserlist(){
+		mUsersInChannel = new LinkedList<String>();
+		String[] users = new String[mUsersInChannel.size()];
+		mUserlist.setListData(users);
 	}
 }

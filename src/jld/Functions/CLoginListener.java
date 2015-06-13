@@ -53,12 +53,13 @@ public class CLoginListener implements ActionListener {
 			
 			if(msg.equals("0x0000")){
 				// Login falsch
+				connection.close();
 				CUserErrorMessages.loginFailed();
 			}
 			else if(msg.equals("0x0001")){
 				// Login richtig
 				//JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
-				wndChat.getInstance(connection);
+				new wndChat(connection, input, output, username);
 				mParent.close();
 			}
 		} catch (UnknownHostException e1) {
