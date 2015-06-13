@@ -1,7 +1,7 @@
 package jld;
 import jld.GUI.*;
 import jld.Utils.CConfigParser;
-import jld.Utils.ErrorMessages;
+import jld.Utils.UserErrorMessages;
 
 import java.awt.EventQueue;
 import java.net.Socket;
@@ -14,7 +14,7 @@ public class CMain{
 				try {					
 					new wndLogin();
 				} catch (Exception e) {
-					ErrorMessages.connectionFailed();
+					UserErrorMessages.connectionFailed();
 					System.exit(0);
 				}
 			}
@@ -31,7 +31,7 @@ public class CMain{
 				mCP = new CConfigParser();
 				mConnection = new Socket(mCP.getAddress(), mCP.getPort());
 			} catch (Exception e) {
-				ErrorMessages.connectionFailed();
+				UserErrorMessages.connectionFailed();
 			}
 		}
 		return mConnection;

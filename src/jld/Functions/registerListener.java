@@ -15,8 +15,8 @@ import java.net.UnknownHostException;
 import jld.Utils.CUtils;
 import jld.Utils.UserErrorMessages;
 
-public class loginListener implements ActionListener {
-	wndLogin mParent;
+public class registerListener implements ActionListener {
+	wndRegister mParent;
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -24,10 +24,17 @@ public class loginListener implements ActionListener {
 			Socket connection = CMain.getConnection();
 			BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			BufferedWriter output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-			final String LOGIN_HEADER = "0x0000";
+			final String HEADER = "0x0001";
 			String username = mParent.getUsername();
 			String pwd = mParent.getPassword();
-			String send = LOGIN_HEADER + CUtils.parseLength(username.length(), false) + username + CUtils.parseLength(pwd.length(), false) + pwd;
+			
+			if(!pwd.equals(mParent.getPassword2())){
+				// Passwoerter stimmen nicht ueberein
+				UserErrorMessages.passwordsDoNotMatch();
+				return;
+			}
+			
+			String send = HEADER + CUtils.parseLength(username.length(), false) + username + CUtils.parseLength(pwd.length(), false) + pwd;
 			output.write(send.toCharArray(), 0, send.length());
 			output.flush();
 			
@@ -51,12 +58,12 @@ public class loginListener implements ActionListener {
 			}
 			msg = msg.substring(0, length);
 			
-			if(msg.equals("0x0000")){
-				// Login falsch
+			if(msg.equals("0x0002")){
+				// Registration fehlgeschlagen
 				UserErrorMessages.loginFailed();
 			}
-			else if(msg.equals("0x0001")){
-				// Login richtig
+			else if(msg.equals("0x0003")){
+				// Registration ok
 				//JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 				wndChat.getInstance(connection);
 				mParent.close();
@@ -68,7 +75,7 @@ public class loginListener implements ActionListener {
 		}
 	}
 	
-	public loginListener(wndLogin parent){
+	public registerListener(wndRegister parent){
 		mParent = parent;
 	}
 

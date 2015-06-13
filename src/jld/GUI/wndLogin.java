@@ -6,6 +6,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -20,7 +21,16 @@ public class wndLogin {
 	private JPasswordField passwordField;
 	
 	public wndLogin() {
-		initialize();
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					initialize();
+					frmLogin.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
 	}
 	
 	public void close(){
@@ -62,7 +72,7 @@ public class wndLogin {
 		btnRegisterButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Register Klick
-				wndRegister.main(null);
+				new wndRegister();
 				frmLogin.dispose();
 			}
 		});
