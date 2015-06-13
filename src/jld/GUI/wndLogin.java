@@ -1,7 +1,6 @@
 package jld.GUI;
 
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JButton;
@@ -22,6 +21,10 @@ public class wndLogin {
 	
 	public wndLogin() {
 		initialize();
+	}
+	
+	public void close(){
+		frmLogin.dispose();
 	}
 
 	

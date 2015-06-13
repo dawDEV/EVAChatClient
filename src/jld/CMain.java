@@ -1,9 +1,12 @@
 package jld;
 import jld.GUI.*;
 import jld.Utils.CConfigParser;
+import jld.Utils.ErrorMessages;
 
 import java.awt.EventQueue;
+import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import javax.swing.JOptionPane;
 public class CMain{
@@ -12,12 +15,10 @@ public class CMain{
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				try {
-					mCP = new CConfigParser();
-					mConnection = new Socket("127.0.0.1", 1337);
+				try {					
 					new wndLogin();
 				} catch (Exception e) {
-					JOptionPane.showConfirmDialog(null,"Verbindung zum Server fehlgeschlagen.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+					ErrorMessages.connectionFailed();
 					System.exit(0);
 				}
 			}
@@ -29,6 +30,14 @@ public class CMain{
 	}
 	
 	public static Socket getConnection(){
+		if(mConnection == null || mConnection.isClosed()){
+			try {
+				mCP = new CConfigParser();
+				mConnection = new Socket(mCP.getAddress(), mCP.getPort());
+			} catch (Exception e) {
+				ErrorMessages.connectionFailed();
+			}
+		}
 		return mConnection;
 	}
 }

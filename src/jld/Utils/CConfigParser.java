@@ -6,12 +6,14 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
+import org.omg.CosNaming.NamingContextExtPackage.AddressHelper;
+
 import jld.Exceptions.*;
 
 public class CConfigParser {
 	private File mConfigFile = new File("config.cfg");
 	private Scanner mReader;
-	private InetAddress mAddress = null;
+	private String mAddress = null;
 	private int mPort = -1;
 	
 	public CConfigParser(){
@@ -30,13 +32,16 @@ public class CConfigParser {
 			String tag = mReader.next();
 			if(tag.equalsIgnoreCase("IP")){
 				mReader.next();
-				setAddress(mReader.next());
+				String address = mReader.next();
+				if(checkAdressValidity(address)){
+					setAddress(address);
+				}	
 			} else if(tag.equalsIgnoreCase("Port")){
 				mReader.next();
 				mPort = mReader.nextInt();
 			}
 		}
-		if(mPort == -1 && mAddress == null){
+		if(mPort == -1 || mAddress == null){
 			System.out.println("Konfigurationsdatei fehlerhaft, Dokumentation lesen / Helpdesk konsultieren.");
 			System.exit(0);
 		}
@@ -47,15 +52,16 @@ public class CConfigParser {
 	}
 
 	private final void setAddress(String address) {
-		try {
-			mAddress = Inet4Address.getByName(address);
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
+		mAddress = address;
 	}
 
 	public final int getPort() {
 		return mPort;
+	}
+	
+	private boolean checkAdressValidity(String address){
+		return address.matches("^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+		// Quelle: http://www.mkyong.com/regular-expressions/how-to-validate-ip-address-with-regular-expression/
 	}
 	
 	

@@ -10,7 +10,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -61,7 +60,9 @@ public class loginListener implements ActionListener {
 			}
 			else if(msg.equals("0x0001")){
 				// Login richtig
-				JOptionPane.showConfirmDialog(null, "Willkomen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+				wndChat.getInstance(connection);
+				mParent.close();
 			}
 		} catch (UnknownHostException e1) {
 			e1.printStackTrace();
