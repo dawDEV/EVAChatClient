@@ -4,11 +4,7 @@ import jld.Utils.CConfigParser;
 import jld.Utils.ErrorMessages;
 
 import java.awt.EventQueue;
-import java.io.IOException;
 import java.net.Socket;
-import java.net.UnknownHostException;
-
-import javax.swing.JOptionPane;
 public class CMain{
 	static CConfigParser mCP;
 	static Socket mConnection;

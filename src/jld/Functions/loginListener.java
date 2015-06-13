@@ -17,6 +17,7 @@ import javax.swing.JOptionPane;
 
 import jld.Utils.CConfigParser;
 import jld.Utils.CUtils;
+import jld.Utils.ErrorMessages;
 
 public class loginListener implements ActionListener {
 	wndLogin mParent;
@@ -43,7 +44,7 @@ public class loginListener implements ActionListener {
 			 */
 			if(length == -1){
 				// Disconnect
-				JOptionPane.showConfirmDialog(null,"Connection abgebrochen",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+				ErrorMessages.serverClosedConnection();
 				System.exit(0);
 				return;
 			}
@@ -56,11 +57,11 @@ public class loginListener implements ActionListener {
 			
 			if(msg.equals("0x0000")){
 				// Login falsch
-				JOptionPane.showConfirmDialog(null,"Anmeldung fehlgeschlagen",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+				ErrorMessages.loginFailed();
 			}
 			else if(msg.equals("0x0001")){
 				// Login richtig
-				JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+				//JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 				wndChat.getInstance(connection);
 				mParent.close();
 			}
