@@ -66,10 +66,15 @@ public class CPacketListener extends Thread {
 							String user = sc.next();
 							mParent.removeFromChannel(user);
 							mParent.newMessage("", "User " + user + " left your channel");
+						} else if (usermessage.startsWith("newChannel")) {
+							sc.next();
+							String channel = sc.next();
+							mParent.clearUserlist();
+							mParent.setChannelName(channel);
 						} else if (usermessage.startsWith("inChannel")) {
 							//Userliste beim Betreten eines Channels fuellen
 							sc.next();
-							mParent.clearUserlist();
+							
 							while(sc.hasNext()){
 								String user = sc.next();
 								mParent.addToChannel(user);

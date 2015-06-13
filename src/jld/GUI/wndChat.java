@@ -29,6 +29,7 @@ public class wndChat {
 	private JList<String> listMessage;
 	private JScrollPane listScrollPane;
 	private JList<String> mUserlist;
+	private JLabel lblChannelname;
 	private LinkedList<String> mUsersInChannel = new LinkedList<String>();
 	private LinkedList<String> mChatMessages = new LinkedList<String>();
 	private String mUsername;
@@ -137,9 +138,9 @@ public class wndChat {
 
 //Label Gruppenname					
 				
-		JLabel lblGroup = new JLabel("Gruppe");
-		lblGroup.setBounds(335, 36, 46, 14);
-		frmChat.getContentPane().add(lblGroup);
+		lblChannelname = new JLabel("Gruppe");
+		lblChannelname.setBounds(335, 36, 100, 14);
+		frmChat.getContentPane().add(lblChannelname);
 
 		
 		
@@ -250,5 +251,9 @@ public class wndChat {
 		mUsersInChannel.add(mUsername);
 		String[] users = {mUsername};
 		mUserlist.setListData(users);
+	}
+	
+	public void setChannelName(String name){
+		lblChannelname.setText(name);
 	}
 }
