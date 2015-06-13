@@ -12,6 +12,7 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.Collections;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
@@ -157,7 +158,7 @@ public class wndChat {
 		frmChat.getContentPane().add(txtMessage);
 		txtMessage.setColumns(10);
 	
-//meuuBar
+//menuBar
 		
 		menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 434, 25);
@@ -227,6 +228,7 @@ public class wndChat {
 	
 	public void addToChannel(String username){
 		mUsersInChannel.add(username);
+		Collections.sort(mUsersInChannel);
 		String[] users = new String[mUsersInChannel.size()];
 		for(int i = 0; i < users.length; i++){
 			users[i] = mUsersInChannel.get(i);
@@ -245,7 +247,8 @@ public class wndChat {
 	
 	public void clearUserlist(){
 		mUsersInChannel = new LinkedList<String>();
-		String[] users = new String[mUsersInChannel.size()];
+		mUsersInChannel.add(mUsername);
+		String[] users = {mUsername};
 		mUserlist.setListData(users);
 	}
 }

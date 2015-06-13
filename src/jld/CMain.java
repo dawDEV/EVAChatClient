@@ -30,6 +30,7 @@ public class CMain{
 			try {
 				mCP = new CConfigParser();
 				mConnection = new Socket(mCP.getAddress(), mCP.getPort());
+				mConnection.setSoTimeout(10000);
 			} catch (Exception e) {
 				CUserErrorMessages.connectionFailed();
 				System.exit(0);

@@ -1,6 +1,7 @@
 package jld.Functions;
 
 import java.io.BufferedReader;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 import jld.GUI.wndChat;
@@ -10,6 +11,7 @@ import jld.Utils.CUtils;
 public class CPacketListener extends Thread {
 	private wndChat mParent;
 	private static CPacketListener mInstance = null;
+	private PrintWriter testWriter;
 	
 	private CPacketListener() {
 	}
@@ -26,6 +28,7 @@ public class CPacketListener extends Thread {
 	@Override
 	public void run(){
 		try{
+			testWriter = new PrintWriter(mParent.getConnection().getOutputStream());
 			BufferedReader input = mParent.getInput();
 			while(true){
 				char buffer[] = new char[256];
@@ -53,7 +56,6 @@ public class CPacketListener extends Thread {
 					String usermessage = msg.substring(8+usernamelength+3);
 					if(username.equals("System")){
 						Scanner sc = new Scanner(usermessage);
-						System.out.println(usermessage);
 						if(usermessage.startsWith("joinChannel")){
 							sc.next();
 							String user = sc.next();
@@ -65,15 +67,13 @@ public class CPacketListener extends Thread {
 							mParent.removeFromChannel(user);
 							mParent.newMessage("", "User " + user + " left your channel");
 						} else if (usermessage.startsWith("inChannel")) {
-							// Userliste beim Betreten eines Channels fuellen
-							//sc.next();
-							//while(sc.hasNext()){
-							//	String user = sc.next();
-							//	mParent.addToChannel(user);
-							//}
-						} else if (usermessage.startsWith("resetInChannel")) {
-							//mParent.clearUserlist();
-							//mParent.addToChannel(mParent.getUsername());
+							//Userliste beim Betreten eines Channels fuellen
+							sc.next();
+							mParent.clearUserlist();
+							while(sc.hasNext()){
+								String user = sc.next();
+								mParent.addToChannel(user);
+							}
 						}
 						sc.close();
 					} else{
@@ -85,7 +85,15 @@ public class CPacketListener extends Thread {
 			}
 			
 		} catch(Exception e){
-			// Nachricht an den Benutzer wird bereits woanders gegeben
+			/*
+			 * Gibt einen Zeilenumbruch zum Server, falls das fehlschlaegt und der Writer einen Fehler feststellt
+			 * ist die Verbindung geschlossen worden.
+			 */
+			testWriter.println();
+			if(testWriter.checkError()){
+				CUserErrorMessages.serverClosedConnection();
+				System.exit(0);
+			}
 		}
 		
 	}
