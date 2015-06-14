@@ -13,7 +13,7 @@ public class CConfigParser {
 		try {
 			mReader = new Scanner(mConfigFile);
 		} catch (FileNotFoundException e) {
-			System.out.println("Config file not found.");
+			CUserErrorMessages.configFileNotFound();
 			System.exit(0);
 		}
 		readConfig();

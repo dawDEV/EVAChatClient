@@ -22,4 +22,7 @@ public final class CUserErrorMessages {
 	public static final void registerFailed() {
 		JOptionPane.showConfirmDialog(null,"Registration fehlgeschlagen.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
+	public static final void configFileNotFound() {
+		JOptionPane.showConfirmDialog(null,"Konfigurationsdatei \"config.cfg\" wurde nicht gefunden.\nBitte lesen Sie die Dokumentation zur Fehlerbehebung.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+	}
 }
