@@ -57,13 +57,12 @@ public class CRegisterListener implements ActionListener {
 				length++;
 			}
 			msg = msg.substring(0, length);
-			
+			System.out.println(msg);
 			if(msg.equals("0x0002")){
 				// Registration fehlgeschlagen
 				CUserErrorMessages.registerFailed();
 				connection.close();
-			}
-			else if(msg.equals("0x0003")){
+			} else if(msg.equals("0x0003")){
 				// Registration ok
 				//JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 				new wndChat(connection, input, output, username);

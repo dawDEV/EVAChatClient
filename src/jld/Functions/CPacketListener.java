@@ -49,6 +49,8 @@ public class CPacketListener extends Thread {
 					length++;
 				}
 				msg = msg.substring(0, length);
+				if(msg.equals("")) continue;
+				//System.out.println(msg);
 				if(msg.startsWith("0x0004")){
 					// Muessen behandelt werden
 					int usernamelength = CUtils.parseLength(msg.substring(7, 8));
@@ -94,7 +96,7 @@ public class CPacketListener extends Thread {
 			 * Gibt einen Zeilenumbruch zum Server, falls das fehlschlaegt und der Writer einen Fehler feststellt
 			 * ist die Verbindung geschlossen worden.
 			 */
-			testWriter.println();
+			testWriter.print(((char)0));
 			if(testWriter.checkError()){
 				CUserErrorMessages.serverClosedConnection();
 				System.exit(0);
