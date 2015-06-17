@@ -81,6 +81,8 @@ public class CPacketListener extends Thread {
 								String user = sc.next();
 								mParent.addToChannel(user);
 							}
+						} else{
+							mParent.newMessage(username, usermessage);
 						}
 						sc.close();
 					} else{
