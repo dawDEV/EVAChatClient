@@ -18,6 +18,7 @@ import java.util.LinkedList;
 import javax.swing.JOptionPane;
 
 import jld.Functions.*;
+import jld.Utils.CUserErrorMessages;
 
 
 public class wndChat {
@@ -105,14 +106,9 @@ public class wndChat {
 		});
 		
 //List Nachrichtenliste		
-		
-	    //   DefaultListModel listenModell = new DefaultListModel();
-	    //   JList messageList = new JList(listenModell);
 		listMessage = new JList<String>();
 		
 		listMessage.setEnabled(false);
-		//String testNachrichten[] = {"Hallo", "Hallo", "Wie geht es dir?", "Danke, Gut und dir?", "Mir auch,Danke"};
-		//listMessage.setListData(testNachrichten);
 		listMessage.setBounds(10, 36, 315, 181);
 		listScrollPane = new JScrollPane(listMessage, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		listScrollPane.setBounds(10, 36, 315, 181);
@@ -123,8 +119,6 @@ public class wndChat {
 				
 		mUserlist = new JList<String>();
 		mUserlist.setEnabled(false);
-		//String testGruppe[] = {"Mueller", "Schmidt", "Schneider", "Fischer", "Weber", "Mayer", "Becker", "Schulz"};
-		//mUserlist.setListData(testGruppe);
 		mUserlist.setBounds(335, 62, 89, 154);
 		frmChat.getContentPane().add(mUserlist);
 
@@ -195,7 +189,12 @@ public class wndChat {
 		mntmHilfe.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Hilfe Klick
-				JOptionPane.showConfirmDialog(null, "Hilfe leider nicht gefunden", "", JOptionPane.DEFAULT_OPTION,JOptionPane.ERROR_MESSAGE);
+				try {
+					mOutput.write("0x0002005/help");
+					mOutput.flush();
+				} catch (IOException e1) {
+					CUserErrorMessages.askingForHelpFailed();
+				}
 			}
 		});
 		mnHilfe.add(mntmHilfe);
