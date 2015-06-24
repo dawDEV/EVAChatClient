@@ -117,15 +117,6 @@ public class wndChat {
 		listScrollPane = new JScrollPane(listMessage, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		listScrollPane.setBounds(10, 36, 315, 181);
 		
-		// Autoscroll
-		listScrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
-			@Override
-			public void adjustmentValueChanged(AdjustmentEvent e) {
-				
-				//e.getAdjustable().setValue(e.getAdjustable().getMaximum());
-			}
-		});
-		
 		frmChat.getContentPane().add(listScrollPane);
 		
 //List Gruppenliste		
