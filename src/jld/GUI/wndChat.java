@@ -95,7 +95,7 @@ public class wndChat {
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				// Um auch den lesenden PacketListener zu schließen
+				// Um auch den lesenden PacketListener zu schlieï¿½en
 				System.exit(0);
 			}
 			
@@ -121,7 +121,8 @@ public class wndChat {
 		listScrollPane.getVerticalScrollBar().addAdjustmentListener(new AdjustmentListener() {
 			@Override
 			public void adjustmentValueChanged(AdjustmentEvent e) {
-				e.getAdjustable().setValue(e.getAdjustable().getMaximum());
+				
+				//e.getAdjustable().setValue(e.getAdjustable().getMaximum());
 			}
 		});
 		
@@ -220,6 +221,7 @@ public class wndChat {
 			messages[i] = mChatMessages.get(i);
 		}
 		listMessage.setListData(messages);
+		listScrollPane.getVerticalScrollBar().setValue(listScrollPane.getVerticalScrollBar().getMaximum());
 		
 	}
 	
