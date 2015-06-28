@@ -4,8 +4,6 @@ import javax.swing.*;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import java.awt.event.AdjustmentEvent;
-import java.awt.event.AdjustmentListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.BufferedReader;
@@ -96,7 +94,7 @@ public class wndChat {
 			
 			@Override
 			public void windowClosed(WindowEvent e) {
-				// Um auch den lesenden PacketListener zu schlieï¿½en
+				// Um wirklich alles zu schließen!
 				System.exit(0);
 			}
 			

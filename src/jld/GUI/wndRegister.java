@@ -18,24 +18,6 @@ public class wndRegister {
 	private JTextField txtUsername;
 	private JPasswordField txtPassword;
 	private JPasswordField txtPassword2;
-	//private JLabel lblNewLabel_3;
-	//private JTextField MailField;
-
-	/**
-	 * Launch the application.
-	 */
-	/*public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					wndRegister window = new wndRegister();
-					window.frmRegister.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}*/
 
 	/**
 	 * Create the application.
@@ -87,15 +69,6 @@ public class wndRegister {
 		txtPassword2 = new JPasswordField();
 		txtPassword2.setBounds(120, 119, 227, 25);
 		frmRegister.getContentPane().add(txtPassword2);
-		
-		/*lblNewLabel_3 = new JLabel("EMailadresse :");
-		lblNewLabel_3.setBounds(10, 47, 100, 25);
-		frmRegister.getContentPane().add(lblNewLabel_3);
-		
-		MailField = new JTextField();
-		MailField.setBounds(120, 47, 227, 25);
-		frmRegister.getContentPane().add(MailField);
-		MailField.setColumns(10);*/
 		
 		JButton btnExitButton = new JButton("Beenden");
 		btnExitButton.addActionListener(new ActionListener() {

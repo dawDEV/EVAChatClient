@@ -58,7 +58,6 @@ public class CLoginListener implements ActionListener {
 			}
 			else if(msg.equals("0x0001")){
 				// Login richtig
-				//JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 				new wndChat(connection, input, output, username);
 				mParent.close();
 			}

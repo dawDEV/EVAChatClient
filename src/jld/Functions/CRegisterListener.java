@@ -64,7 +64,6 @@ public class CRegisterListener implements ActionListener {
 				connection.close();
 			} else if(msg.equals("0x0003")){
 				// Registration ok
-				//JOptionPane.showConfirmDialog(null, "Willkommen " + "\"" + username + "\"" + " !", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 				new wndChat(connection, input, output, username);
 				mParent.close();
 			}
