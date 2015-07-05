@@ -210,7 +210,6 @@ public class wndChat {
 		}
 		listMessage.setListData(messages);
 		listScrollPane.getVerticalScrollBar().setValue(listScrollPane.getVerticalScrollBar().getMaximum());
-		
 	}
 	
 	public void clearMessagebox(){

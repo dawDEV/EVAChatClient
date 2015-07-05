@@ -43,53 +43,14 @@ public class CPacketListener extends Thread {
 					System.exit(0);
 					return;
 				}
-				String msg = String.valueOf(buffer);
-				length = 0;
-				while((int)msg.charAt(length) != 0){
-					length++;
-				}
-				msg = msg.substring(0, length);
-				if(msg.equals("")) continue;
-				if(msg.startsWith("0x0004")){
-					// Muessen behandelt werden
-					int usernamelength = CUtils.parseLength(msg.substring(7, 8));
-					String username = msg.substring(8, 8+usernamelength);
-					String usermessage = msg.substring(8+usernamelength+3);
-					if(username.equals("System")){
-						Scanner sc = new Scanner(usermessage);
-						if(usermessage.startsWith("joinChannel")){
-							sc.next();
-							String user = sc.next();
-							mParent.addToChannel(user);
-							mParent.newMessage("", "User " + user + " joined your channel");
-						} else if (usermessage.startsWith("leaveChannel")) {
-							sc.next();
-							String user = sc.next();
-							mParent.removeFromChannel(user);
-							mParent.newMessage("", "User " + user + " left your channel");
-						} else if (usermessage.startsWith("newChannel")) {
-							sc.next();
-							String channel = sc.next();
-							mParent.clearUserlist();
-							mParent.setChannelName(channel);
-						} else if (usermessage.startsWith("inChannel")) {
-							//Userliste beim Betreten eines Channels fuellen
-							sc.next();
-							
-							while(sc.hasNext()){
-								String user = sc.next();
-								mParent.addToChannel(user);
-							}
-						} else{
-							mParent.newMessage(username, usermessage);
-						}
-						sc.close();
-					} else{
-						// Koennen ausgegeben werden
-						mParent.newMessage(username, usermessage);
+				final String msg = String.valueOf(buffer);
+				Thread a = new Thread(){
+					@Override
+					public void run() {
+						CPacketListener.handlePacket(msg, mParent);
 					}
-					
-				}
+				};
+				a.start();
 			}
 			
 		} catch(Exception e){
@@ -103,6 +64,54 @@ public class CPacketListener extends Thread {
 				System.exit(0);
 			}
 		}
-		
+	}
+	
+	public static void handlePacket(String msg, wndChat mParent){
+		int length = 0;
+		while((int)msg.charAt(length) != 0){
+			length++;
+		}
+		msg = msg.substring(0, length);
+		if(msg.equals("")) return;
+		if(msg.startsWith("0x0004")){
+			// Muessen behandelt werden
+			int usernamelength = CUtils.parseLength(msg.substring(7, 8));
+			String username = msg.substring(8, 8+usernamelength);
+			String usermessage = msg.substring(8+usernamelength+3);
+			if(username.equals("System")){
+				Scanner sc = new Scanner(usermessage);
+				if(usermessage.startsWith("joinChannel")){
+					sc.next();
+					String user = sc.next();
+					mParent.addToChannel(user);
+					mParent.newMessage("", "User " + user + " joined your channel");
+				} else if (usermessage.startsWith("leaveChannel")) {
+					sc.next();
+					String user = sc.next();
+					mParent.removeFromChannel(user);
+					mParent.newMessage("", "User " + user + " left your channel");
+				} else if (usermessage.startsWith("newChannel")) {
+					sc.next();
+					String channel = sc.next();
+					mParent.clearUserlist();
+					mParent.setChannelName(channel);
+				} else if (usermessage.startsWith("inChannel")) {
+					//Userliste beim Betreten eines Channels fuellen
+					sc.next();
+					
+					while(sc.hasNext()){
+						String user = sc.next();
+						mParent.addToChannel(user);
+					}
+				} else{
+					mParent.newMessage(username, usermessage);
+				}
+				sc.close();
+			} else{
+				// Koennen ausgegeben werden
+				mParent.newMessage(username, usermessage);
+			}
+			
+		}
 	}
 }
