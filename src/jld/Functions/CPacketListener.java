@@ -1,6 +1,8 @@
 package jld.Functions;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
@@ -9,9 +11,12 @@ import jld.Utils.CUserErrorMessages;
 import jld.Utils.CUtils;
 
 public class CPacketListener extends Thread {
-	private wndChat mParent;
+	private static wndChat mParent;
 	private static CPacketListener mInstance = null;
 	private PrintWriter testWriter;
+	private CHeartbeat mHBThread;
+	
+	private boolean stopThread = false;
 	
 	private CPacketListener() {
 	}
@@ -20,6 +25,7 @@ public class CPacketListener extends Thread {
 		if(mInstance == null){
 			mInstance = new CPacketListener();
 			mInstance.mParent = parent;
+			mInstance.mHBThread = new CHeartbeat();
 			mInstance.start();
 		}
 		return mInstance;
@@ -27,41 +33,40 @@ public class CPacketListener extends Thread {
 	
 	@Override
 	public void run(){
-		try{
-			testWriter = new PrintWriter(mParent.getConnection().getOutputStream());
-			BufferedReader input = mParent.getInput();
-			while(true){
-				char buffer[] = new char[256];
-				int length = 0;
-				length = input.read(buffer, 0, 256);
-				/* length = -1 => Nutzer hat die Verbindung getrennt.
-				 * length >= 1 => Nachrichten stehen an.
-				 */
-				if(length == -1){
-					// Disconnect
-					CUserErrorMessages.serverClosedConnection();
-					System.exit(0);
-					return;
-				}
-				final String msg = String.valueOf(buffer);
-				Thread a = new Thread(){
-					@Override
-					public void run() {
-						CPacketListener.handlePacket(msg, mParent);
+		while(!stopThread){
+			try{
+				testWriter = new PrintWriter(mParent.getConnection().getOutputStream());
+				BufferedReader input = mParent.getInput();
+				
+					char buffer[] = new char[256];
+					int length = 0;
+					length = input.read(buffer, 0, 256);
+					/* length = -1 => Nutzer hat die Verbindung getrennt.
+					 * length >= 1 => Nachrichten stehen an.
+					 */
+					if(length == -1){
+						// Disconnect
+						CUserErrorMessages.serverClosedConnection();
+						System.exit(0);
+						return;
 					}
-				};
-				a.start();
-			}
-			
-		} catch(Exception e){
-			/*
-			 * Gibt einen Zeilenumbruch zum Server, falls das fehlschlaegt und der Writer einen Fehler feststellt
-			 * ist die Verbindung geschlossen worden.
-			 */
-			testWriter.print(((char)0));
-			if(testWriter.checkError()){
-				CUserErrorMessages.serverClosedConnection();
-				System.exit(0);
+					final String msg = String.valueOf(buffer);
+					Thread a = new Thread(){
+						@Override
+						public void run() {
+							CPacketListener.handlePacket(msg, mParent);
+						}
+					};
+					a.start();
+				
+			} catch(Exception e){
+				
+				try {
+					mParent.getOutput().write(1);
+					mParent.getOutput().flush();
+				} catch (IOException e1) {
+				
+				}
 			}
 		}
 	}
@@ -72,6 +77,7 @@ public class CPacketListener extends Thread {
 			length++;
 		}
 		msg = msg.substring(0, length);
+		mInstance.mHBThread.beatReceived();
 		if(msg.equals("")) return;
 		if(msg.startsWith("0x0004")){
 			// Muessen behandelt werden
