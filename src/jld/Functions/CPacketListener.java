@@ -79,7 +79,7 @@ public class CPacketListener extends Thread {
 		if(msg.equals("")) return;
 		if(msg.startsWith("0x0004")){
 			// Muessen behandelt werden
-			int usernamelength = CUtils.parseLength(msg.substring(7, 8));
+			int usernamelength = CUtils.parseLength(msg.substring(6, 8));
 			String username = msg.substring(8, 8+usernamelength);
 			String usermessage = msg.substring(8+usernamelength+3);
 			if(username.equals("System")){

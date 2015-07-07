@@ -196,7 +196,14 @@ public class wndChat {
 			messages[i] = mChatMessages.get(i);
 		}
 		listMessage.setListData(messages);
+		
 		listScrollPane.getVerticalScrollBar().setValue(listScrollPane.getVerticalScrollBar().getMaximum());
+
+		int lastIndex = listMessage.getModel().getSize() - 1;
+		if (lastIndex >= 0) {
+		listMessage.ensureIndexIsVisible(lastIndex);
+		}
+		
 	}
 	
 	public void clearMessagebox(){

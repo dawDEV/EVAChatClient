@@ -32,7 +32,6 @@ public class CHeartbeat extends Thread {
 	}
 	
 	public void beatReceived(){
-		System.out.println("beat");
 		hbReceived = true;
 	}
 }
