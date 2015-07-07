@@ -34,7 +34,7 @@ public class CConfigParser {
 			}
 		}
 		if(mPort == -1 || mAddress == null){
-			System.out.println("Konfigurationsdatei fehlerhaft, Dokumentation lesen / Helpdesk konsultieren.");
+			CUserErrorMessages.configFileInappropriate();
 			System.exit(0);
 		}
 	}

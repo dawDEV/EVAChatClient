@@ -1,9 +1,7 @@
 package jld.Functions;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Scanner;
 
 import jld.GUI.wndChat;
@@ -11,9 +9,8 @@ import jld.Utils.CUserErrorMessages;
 import jld.Utils.CUtils;
 
 public class CPacketListener extends Thread {
-	private static wndChat mParent;
+	private wndChat mParent;
 	private static CPacketListener mInstance = null;
-	private PrintWriter testWriter;
 	private CHeartbeat mHBThread;
 	
 	private boolean stopThread = false;
@@ -35,9 +32,7 @@ public class CPacketListener extends Thread {
 	public void run(){
 		while(!stopThread){
 			try{
-				testWriter = new PrintWriter(mParent.getConnection().getOutputStream());
 				BufferedReader input = mParent.getInput();
-				
 					char buffer[] = new char[256];
 					int length = 0;
 					length = input.read(buffer, 0, 256);
@@ -51,6 +46,11 @@ public class CPacketListener extends Thread {
 						return;
 					}
 					final String msg = String.valueOf(buffer);
+					/* Sending and receiving beats */
+					mInstance.mHBThread.beatReceived();
+					mParent.getOutput().write(1);
+					mParent.getOutput().flush();
+					
 					Thread a = new Thread(){
 						@Override
 						public void run() {
@@ -60,7 +60,6 @@ public class CPacketListener extends Thread {
 					a.start();
 				
 			} catch(Exception e){
-				
 				try {
 					mParent.getOutput().write(1);
 					mParent.getOutput().flush();
@@ -77,7 +76,6 @@ public class CPacketListener extends Thread {
 			length++;
 		}
 		msg = msg.substring(0, length);
-		mInstance.mHBThread.beatReceived();
 		if(msg.equals("")) return;
 		if(msg.startsWith("0x0004")){
 			// Muessen behandelt werden

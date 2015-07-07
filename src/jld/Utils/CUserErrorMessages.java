@@ -25,7 +25,10 @@ public final class CUserErrorMessages {
 	public static final void configFileNotFound() {
 		JOptionPane.showConfirmDialog(null,"Konfigurationsdatei \"config.cfg\" wurde nicht gefunden.\nBitte lesen Sie die Dokumentation zur Fehlerbehebung.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
+	public static final void configFileInappropriate() {
+		JOptionPane.showConfirmDialog(null,"Konfigurationsdatei fehlerhaft, Dokumentation lesen / Helpdesk konsultieren.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+	}
 	public static final void askingForHelpFailed(){
-		JOptionPane.showConfirmDialog(null,"Ihre Frage nach Hilfe konnte nicht durchgeführt werden.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showConfirmDialog(null,"Ihre Frage nach Hilfe konnte nicht durchgefuehrt werden.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
 }

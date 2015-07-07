@@ -13,8 +13,6 @@ import java.net.Socket;
 import java.util.Collections;
 import java.util.LinkedList;
 
-import javax.swing.JOptionPane;
-
 import jld.Functions.*;
 import jld.Utils.CUserErrorMessages;
 
@@ -153,11 +151,10 @@ public class wndChat {
 		menuBar.add(mnDatei);
 		
 		
-		JMenuItem mntmAbmelden = new JMenuItem("Abmelden");
-		mntmAbmelden.addActionListener(new ActionListener() {
+		JMenuItem mntmBeenden = new JMenuItem("Programm beenden");
+		mntmBeenden.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Abmelden Klick
-				JOptionPane.showConfirmDialog(null, "Abgemeldet!", "", JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+				//Beenden click
 				try {
 					mConnection.close();
 				} catch (IOException e1) {
@@ -168,16 +165,6 @@ public class wndChat {
 			}
 		});
 		
-		mnDatei.add(mntmAbmelden);
-		
-		JMenuItem mntmBeenden = new JMenuItem("Beenden");
-		mntmBeenden.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				// Beenden Klick
-				System.exit(0);
-			}
-		});
-
 		mnDatei.add(mntmBeenden);
 		
 		mnHilfe = new JMenu("Hilfe");

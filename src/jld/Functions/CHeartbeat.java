@@ -1,9 +1,5 @@
 package jld.Functions;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import jld.GUI.wndChat;
 import jld.Utils.CUserErrorMessages;
 
 public class CHeartbeat extends Thread {
