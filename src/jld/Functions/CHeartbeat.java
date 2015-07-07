@@ -14,6 +14,7 @@ public class CHeartbeat extends Thread {
 		try {
 			while(!stopThread){
 				if(!hbReceived){
+					System.out.println("No HB from server");
 					CUserErrorMessages.serverClosedConnection();
 					System.exit(0);
 				}
@@ -31,6 +32,7 @@ public class CHeartbeat extends Thread {
 	}
 	
 	public void beatReceived(){
+		System.out.println("beat");
 		hbReceived = true;
 	}
 }
