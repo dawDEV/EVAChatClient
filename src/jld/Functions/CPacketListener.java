@@ -48,20 +48,82 @@ public class CPacketListener extends Thread {
 						System.exit(0);
 						return;
 					}
-					final String msg = String.valueOf(buffer);
+					String msg = String.valueOf(buffer);
 					
 					/* Sending and receiving beats */
 					mInstance.mHBThread.beatReceived();
 					mParent.getOutput().write("1");
 					mParent.getOutput().flush();
 					
-					Thread a = new Thread(){
+					/*Thread a = new Thread(){
 						@Override
 						public void run() {
 							CPacketListener.handlePacket(msg, mParent);
 						}
 					};
-					a.start();
+					a.start();*/
+					
+					length = 0;
+					if(mRestMessage.length() > 0){
+						StringBuilder sb = new StringBuilder(mRestMessage);
+						sb.append(msg);
+						msg = sb.toString();
+						mRestMessage = "";
+					}
+					while(length < msg.length() && (int)msg.charAt(length) != 0){
+						length++;
+					}
+					
+					msg = msg.substring(0, length);
+					if(msg.equals("")) return;
+					if(msg.startsWith("0x0004")){
+						// Muessen behandelt werden
+						int usernamelength = CUtils.parseLength(msg.substring(6, 8));
+						String username = msg.substring(8, 8+usernamelength);
+						int messageLength = Integer.valueOf(msg.substring(8+usernamelength, 8+usernamelength+3));
+						String usermessage = msg.substring(8+usernamelength+3, 8+usernamelength+3+messageLength);
+						
+						// Rest
+						mRestMessage = msg.substring(8+usernamelength+3+messageLength+1);
+						
+						if(username.equals("System")){
+							Scanner sc = new Scanner(usermessage);
+							if(usermessage.startsWith("joinChannel")){
+								// Benutzer hat Channel betreten
+								sc.next();
+								String user = sc.next();
+								mParent.addToChannel(user);
+								mParent.newMessage("", "User " + user + " joined your channel");
+							} else if (usermessage.startsWith("leaveChannel")) {
+								// Benutzer hat Channel verlassen
+								sc.next();
+								String user = sc.next();
+								mParent.removeFromChannel(user);
+								mParent.newMessage("", "User " + user + " left your channel");
+							} else if (usermessage.startsWith("newChannel")) {
+								// Neuer Channelname
+								sc.next();
+								String channel = sc.next();
+								mParent.clearUserlist();
+								mParent.setChannelName(channel);
+							} else if (usermessage.startsWith("inChannel")) {
+								//Userliste beim Betreten eines Channels fuellen
+								sc.next();
+								while(sc.hasNext()){
+									String user = sc.next();
+									mParent.addToChannel(user);
+								}
+							} else{
+								// CASE: Andere System-Nachrichten
+								mParent.newMessage(username, usermessage);
+							}
+							sc.close();
+						} else{
+							// CASE: Nachrichten
+							mParent.newMessage(username, usermessage);
+						}
+						
+					}
 				
 			} catch(Exception e){
 				try {
@@ -75,6 +137,10 @@ public class CPacketListener extends Thread {
 	}
 	
 	public static void handlePacket(String msg, wndChat mParent){
+		if(!msg.startsWith("1")){
+			System.out.println("Msg to handle: " + msg);
+		}
+		
 		int length = 0;
 		if(mRestMessage.length() > 0){
 			StringBuilder sb = new StringBuilder(mRestMessage);
@@ -82,7 +148,7 @@ public class CPacketListener extends Thread {
 			msg = sb.toString();
 			mRestMessage = "";
 		}
-		while(length < 256 && (int)msg.charAt(length) != 0){
+		while(length < msg.length() && (int)msg.charAt(length) != 0){
 			length++;
 		}
 		msg = msg.substring(0, length);
@@ -93,7 +159,11 @@ public class CPacketListener extends Thread {
 			String username = msg.substring(8, 8+usernamelength);
 			int messageLength = Integer.valueOf(msg.substring(8+usernamelength, 8+usernamelength+3));
 			String usermessage = msg.substring(8+usernamelength+3, 8+usernamelength+3+messageLength);
+			
+			// Rest
 			mRestMessage = msg.substring(8+usernamelength+3+messageLength+1);
+			if(mRestMessage.length() > 0)
+				System.out.println("Rest: " + mRestMessage);
 			if(username.equals("System")){
 				Scanner sc = new Scanner(usermessage);
 				if(usermessage.startsWith("joinChannel")){

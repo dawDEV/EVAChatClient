@@ -201,7 +201,7 @@ public class wndChat {
 
 		int lastIndex = listMessage.getModel().getSize() - 1;
 		if (lastIndex >= 0) {
-		listMessage.ensureIndexIsVisible(lastIndex);
+			listMessage.ensureIndexIsVisible(lastIndex);
 		}
 		
 	}
