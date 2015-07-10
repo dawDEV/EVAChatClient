@@ -42,12 +42,10 @@ public class CSendMessageListener implements ActionListener {
 				if(!msg.startsWith("/")){
 					mParent.newMessage(mParent.getUsername(), partMsg);
 				}
-				System.out.println("Sending: " + num++);
 			}
 			BufferedWriter output = mParent.getOutput();
 			final String HEADER = "0x0002";
 			String send = HEADER + CUtils.parseLength(msg.length(), true) + msg;
-			System.out.println("Sending: " + num++);
 			output.write(send);
 			output.flush();
 			mParent.clearMessagebox();

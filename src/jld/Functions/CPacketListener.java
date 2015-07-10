@@ -55,11 +55,6 @@ public class CPacketListener extends Thread {
 					mParent.getOutput().write("1");
 					mParent.getOutput().flush();
 					
-					// Debug Ausgabe
-					if(msg.startsWith("0x")){
-						System.out.println(msg);
-					}
-					
 					Thread a = new Thread(){
 						@Override
 						public void run() {
@@ -86,7 +81,6 @@ public class CPacketListener extends Thread {
 			sb.append(msg);
 			msg = sb.toString();
 			mRestMessage = "";
-			System.out.println("Rest: " + msg + "##");
 		}
 		while(length < 256 && (int)msg.charAt(length) != 0){
 			length++;
