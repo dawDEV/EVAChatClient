@@ -13,6 +13,9 @@ public class CPacketListener extends Thread {
 	private static CPacketListener mInstance = null;
 	private CHeartbeat mHBThread;
 	
+	// Store rest message if there's any
+	private static String mRestMessage = "";
+	
 	private boolean stopThread = false;
 	
 	private CPacketListener() {
@@ -46,10 +49,16 @@ public class CPacketListener extends Thread {
 						return;
 					}
 					final String msg = String.valueOf(buffer);
+					
 					/* Sending and receiving beats */
 					mInstance.mHBThread.beatReceived();
-					mParent.getOutput().write(1);
+					mParent.getOutput().write("1");
 					mParent.getOutput().flush();
+					
+					// Debug Ausgabe
+					if(msg.startsWith("0x")){
+						System.out.println(msg);
+					}
 					
 					Thread a = new Thread(){
 						@Override
@@ -61,7 +70,7 @@ public class CPacketListener extends Thread {
 				
 			} catch(Exception e){
 				try {
-					mParent.getOutput().write(1);
+					mParent.getOutput().write("1");
 					mParent.getOutput().flush();
 				} catch (IOException e1) {
 				
@@ -72,7 +81,14 @@ public class CPacketListener extends Thread {
 	
 	public static void handlePacket(String msg, wndChat mParent){
 		int length = 0;
-		while((int)msg.charAt(length) != 0){
+		if(mRestMessage.length() > 0){
+			StringBuilder sb = new StringBuilder(mRestMessage);
+			sb.append(msg);
+			msg = sb.toString();
+			mRestMessage = "";
+			System.out.println("Rest: " + msg + "##");
+		}
+		while(length < 256 && (int)msg.charAt(length) != 0){
 			length++;
 		}
 		msg = msg.substring(0, length);
@@ -81,7 +97,9 @@ public class CPacketListener extends Thread {
 			// Muessen behandelt werden
 			int usernamelength = CUtils.parseLength(msg.substring(6, 8));
 			String username = msg.substring(8, 8+usernamelength);
-			String usermessage = msg.substring(8+usernamelength+3);
+			int messageLength = Integer.valueOf(msg.substring(8+usernamelength, 8+usernamelength+3));
+			String usermessage = msg.substring(8+usernamelength+3, 8+usernamelength+3+messageLength);
+			mRestMessage = msg.substring(8+usernamelength+3+messageLength+1);
 			if(username.equals("System")){
 				Scanner sc = new Scanner(usermessage);
 				if(usermessage.startsWith("joinChannel")){
