@@ -22,10 +22,10 @@ public class CSendMessageListener implements ActionListener {
 		try{
 			String msg = mParent.getMessage();
 			if(msg.equals("")) return;
-			msg.replace("ä", "ae");
-			msg.replace("ü", "ue");
-			msg.replace("ö", "oe");
-			msg.replace("ß", "ss");
+			msg = msg.replace("ä", "ae");
+			msg = msg.replace("ü", "ue");
+			msg = msg.replace("ö", "oe");
+			msg = msg.replace("ß", "ss");
 			final int MAX_MSG_LENGTH = 200; // Too ensure there's enough space for header infos and maybe future development
 			int num = 1;
 			while(msg.length() > MAX_MSG_LENGTH){
