@@ -21,18 +21,22 @@ public class CRegisterListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		try {
-			Socket connection = CMain.getConnection();
-			BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			BufferedWriter output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
-			final String HEADER = "0x0001";
 			String username = mParent.getUsername();
 			String pwd = mParent.getPassword();
-			
+			if(pwd.length() < 3 && username.length() < 3){
+				// Passwoerter stimmen nicht ueberein
+				CUserErrorMessages.passwordOrUsernameTooSmall();
+				return;
+			}
 			if(!pwd.equals(mParent.getPassword2())){
 				// Passwoerter stimmen nicht ueberein
 				CUserErrorMessages.passwordsDoNotMatch();
 				return;
 			}
+			Socket connection = CMain.getConnection();
+			BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			BufferedWriter output = new BufferedWriter(new OutputStreamWriter(connection.getOutputStream()));
+			final String HEADER = "0x0001";
 			
 			String send = HEADER + CUtils.parseLength(username.length(), false) + username + CUtils.parseLength(pwd.length(), false) + pwd;
 			output.write(send.toCharArray(), 0, send.length());

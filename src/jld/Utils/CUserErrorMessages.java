@@ -15,7 +15,9 @@ public final class CUserErrorMessages {
 	public static final void passwordsDoNotMatch(){
 		JOptionPane.showConfirmDialog(null,"Passwoerter stimmen nicht ueberein!",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
-	
+	public static final void passwordOrUsernameTooSmall(){
+		JOptionPane.showConfirmDialog(null,"Passwort oder Benutzername zu kurz! (min. 3 Zeichen)",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
+	}
 	public static final void sendingMessageFailed(){
 		JOptionPane.showConfirmDialog(null,"Ihre Nachricht konnte nicht gesendet werden.",null, JOptionPane.DEFAULT_OPTION,JOptionPane.INFORMATION_MESSAGE);
 	}
